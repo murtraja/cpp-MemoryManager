@@ -39,6 +39,39 @@ void * MemoryBlockManager::Allocate(const char * functionName, int lineNo, const
 {
 	return nullptr;
 }
+bool MemoryBlockManager::IsBlockCorrupt(MemBlock * memBlock)
+{
+	char *guardStart = memBlock->m_requestMemPtr + memBlock->m_requestedSize;
+	GuardBytes* guard = reinterpret_cast<GuardBytes*>(guardStart);
+	return IsGuardInvalid(guard);
+}
+bool MemoryBlockManager::IsGuardInvalid(GuardBytes * guard)
+{
+	return guard->m_guardBytes != GUARD_BYTES;
+}
+bool MemoryBlockManager::CheckMemory()
+{
+	MemBlock* firstCorruptBlock = GetFirstCorruptBlock();
+	if (firstCorruptBlock)
+	{
+		return true;
+	}
+
+	return false;
+}
+MemoryBlockManager::MemBlock * MemoryBlockManager::GetFirstCorruptBlock()
+{
+	MemBlock* block = m_head;
+	while (block)
+	{
+		if (IsBlockCorrupt(block))
+		{
+			return block;
+		}
+		block = block->next;
+	}
+	return nullptr;
+}
 MemoryBlockManager::~MemoryBlockManager()
 {
 }
