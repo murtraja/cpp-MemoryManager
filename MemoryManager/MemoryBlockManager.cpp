@@ -35,6 +35,10 @@ void * MemoryBlockManager::Allocate(const char * functionName, int lineNo, const
 	return reinterpret_cast<void*>(rawMemory + sizeOfMemBlock);
 }
 
+void * MemoryBlockManager::Allocate(const char * functionName, int lineNo, const char * fileName, int requestedTypeSize, int count)
+{
+	return nullptr;
+}
 MemoryBlockManager::~MemoryBlockManager()
 {
 }

@@ -8,18 +8,28 @@
 
 class Test
 {
-	int m_member;
+	int m_member{};
 public:
 	void* operator new(size_t size, const char * functionName, int lineNo, const char * fileName)
 	{
-		int requestedSize = sizeof(Test);
-		return MemoryBlockManager::GetInstance().Allocate(functionName, lineNo, fileName, requestedSize);
+		return MemoryBlockManager::GetInstance()
+			.Allocate(functionName, lineNo, fileName, size);
+	}
+
+	void* operator new[](size_t size, const char * functionName, int lineNo, const char * fileName)
+	{
+		return MemoryBlockManager::GetInstance()
+			//.Allocate(functionName, lineNo, fileName, sizeof(Test), size/(sizeof(Test)));
+			.Allocate(functionName, lineNo, fileName, size);
 	}
 };
 
 void Test1()
 {
 	Test *newTest = MNEW Test();
+	Test *arrayTest = MNEW Test[5];
+	;
+	;
 }
 
 int main()

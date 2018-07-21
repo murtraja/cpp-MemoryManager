@@ -19,6 +19,7 @@ class MemoryBlockManager
 public:
 	static MemoryBlockManager& GetInstance();
 	void* Allocate(const char* functionName, int lineNo, const char* fileName, int requestedSize);
+	void* Allocate(const char* functionName, int lineNo, const char* fileName, int requestedTypeSize, int count);
 	~MemoryBlockManager();
 };
 
